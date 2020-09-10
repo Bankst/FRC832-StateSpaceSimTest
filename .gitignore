@@ -1,0 +1,5 @@
+﻿.gradle
+.idea
+.vscode
+.wpilib
+build
