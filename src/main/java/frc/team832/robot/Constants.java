@@ -43,8 +43,8 @@ public final class Constants {
         // These characterization values MUST be determined either experimentally or theoretically
         // for *your* robot's drive.
         // These two values are "angular" kV and kA
-        public static final double kvVoltSecondsPerRadian = 1.0;
-        public static final double kaVoltSecondsSquaredPerRadian = 0.05;
+        public static final double kvVoltSecondsPerRadian = 2.0;
+        public static final double kaVoltSecondsSquaredPerRadian = .1;
 
         public static final LinearSystem<N2, N2, N2> kDrivetrainPlant =
                 LinearSystemId.identifyDrivetrainSystem(kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter,

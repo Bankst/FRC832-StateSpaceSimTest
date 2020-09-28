@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.Field2d;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
+import edu.wpi.first.wpilibj.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team832.robot.Constants;
 
@@ -71,11 +73,12 @@ public class DriveSubsystem extends SubsystemBase {
         if (RobotBase.isSimulation()) { // If our robot is simulated
             // This class simulates our drivetrain's motion around the field.
             m_drivetrainSimulator = new DifferentialDrivetrainSim(
-                    Constants.DriveConstants.kDrivetrainPlant,
-                    Constants.DriveConstants.kDriveKinematics,
                     Constants.DriveConstants.kDriveGearbox,
                     Constants.DriveConstants.kDriveGearing,
-                    Constants.DriveConstants.kWheelDiameterMeters / 2.0);
+                    1.0, // MoI of robot
+                    44.5, // mass of robot
+                    Constants.DriveConstants.kWheelDiameterMeters / 2.0,
+                    Constants.DriveConstants.kTrackwidthMeters);
 
             // The encoder and gyro angle sims let us set simulated sensor readings
             m_leftEncoderSim = new EncoderSim(m_leftEncoder);

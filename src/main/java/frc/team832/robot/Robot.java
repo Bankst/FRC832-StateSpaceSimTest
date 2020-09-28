@@ -9,7 +9,9 @@ package frc.team832.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
@@ -34,8 +36,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void simulationPeriodic() {
-    double drawCurrent = robotContainer.robotDrive.getDrawnCurrentAmps();
-    double loadedVoltage = BatterySim.calculateLoadedBatteryVoltage(drawCurrent);
+    double drawCurrent = -robotContainer.robotDrive.getDrawnCurrentAmps();
+    double[] currentDraw = { drawCurrent };
+    double loadedVoltage = BatterySim.calculateLoadedBatteryVoltage(12.8, 0.018, currentDraw);
+    SmartDashboard.putNumber("current", drawCurrent);
+
+    double leftVelo = robotContainer.robotDrive.m_drivetrainSimulator.getState(DifferentialDrivetrainSim.State.kLeftVelocity);
+    double rightVelo = robotContainer.robotDrive.m_drivetrainSimulator.getState(DifferentialDrivetrainSim.State.kRightVelocity);
+    SmartDashboard.putNumber("leftVelo", leftVelo);
+    SmartDashboard.putNumber("rightVelo", rightVelo);
+
     RoboRioSim.setVInVoltage(loadedVoltage);
   }
 

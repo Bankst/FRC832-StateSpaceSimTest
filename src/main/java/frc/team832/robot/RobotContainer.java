@@ -1,6 +1,8 @@
 package frc.team832.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -21,11 +23,10 @@ public final class RobotContainer {
 
     public final DriveSubsystem robotDrive = new DriveSubsystem();
 
-    final Joystick leftStick = new Joystick(Constants.OIConstants.kDriverLeftStickPort);
-    final Joystick rightStick = new Joystick(Constants.OIConstants.kDriverRightStickPort);
+    final XboxController controller = new XboxController(0);
 
     public RobotContainer() {
-        robotDrive.setDefaultCommand(new RunCommand(() -> robotDrive.arcadeDrive(-leftStick.getY(), rightStick.getX()), robotDrive));
+        robotDrive.setDefaultCommand(new RunCommand(() -> robotDrive.arcadeDrive(-controller.getY(GenericHID.Hand.kLeft), controller.getX(GenericHID.Hand.kRight)), robotDrive));
     }
 
     public Command getAutonomousCommand() {
