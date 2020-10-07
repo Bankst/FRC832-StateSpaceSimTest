@@ -1,8 +1,7 @@
 package frc.team832.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -15,18 +14,26 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.team832.lib.driverinput.controllers.Xbox360Controller;
 import frc.team832.robot.subsystems.DriveSubsystem;
+import frc.team832.robot.subsystems.ShooterSubsystem;
 
 import java.util.List;
 
 public final class RobotContainer {
 
     public final DriveSubsystem robotDrive = new DriveSubsystem();
+    public final ShooterSubsystem shooter = new ShooterSubsystem();
 
-    final XboxController controller = new XboxController(0);
+    final Xbox360Controller controller = new Xbox360Controller(0);
+    final Button userButton = new Button(RobotController::getUserButton);
 
     public RobotContainer() {
         robotDrive.setDefaultCommand(new RunCommand(() -> robotDrive.arcadeDrive(-controller.getY(GenericHID.Hand.kLeft), controller.getX(GenericHID.Hand.kRight)), robotDrive));
+
+        userButton.whenPressed(() -> shooter.setSetpoint(4000), shooter).whenReleased(() -> shooter.setSetpoint(0), shooter);
+        controller.aButton.whenPressed(() -> shooter.setSetpoint(4000), shooter).whenReleased(() -> shooter.setSetpoint(0), shooter);
     }
 
     public Command getAutonomousCommand() {

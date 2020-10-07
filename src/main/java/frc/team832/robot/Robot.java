@@ -36,15 +36,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void simulationPeriodic() {
-    double drawCurrent = -robotContainer.robotDrive.getDrawnCurrentAmps();
-    double[] currentDraw = { drawCurrent };
-    double loadedVoltage = BatterySim.calculateLoadedBatteryVoltage(12.8, 0.018, currentDraw);
-    SmartDashboard.putNumber("current", drawCurrent);
+    double driveCurrent = -robotContainer.robotDrive.getDrawnCurrentAmps();
+    double shooterCurrent = -robotContainer.shooter.getDrawnCurrentAmps();
+    double loadedVoltage = BatterySim.calculateLoadedBatteryVoltage(12.8, 0.018, driveCurrent, shooterCurrent);
 
-    double leftVelo = robotContainer.robotDrive.m_drivetrainSimulator.getState(DifferentialDrivetrainSim.State.kLeftVelocity);
-    double rightVelo = robotContainer.robotDrive.m_drivetrainSimulator.getState(DifferentialDrivetrainSim.State.kRightVelocity);
-    SmartDashboard.putNumber("leftVelo", leftVelo);
-    SmartDashboard.putNumber("rightVelo", rightVelo);
 
     RoboRioSim.setVInVoltage(loadedVoltage);
   }
@@ -62,5 +57,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
+//    robotContainer.shooter.reset();
   }
 }

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.system.LinearSystem;
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
+import edu.wpi.first.wpiutil.math.numbers.N1;
 import edu.wpi.first.wpiutil.math.numbers.N2;
 
 public final class Constants {
@@ -56,6 +57,37 @@ public final class Constants {
 
         // Example value only - as above, this must be tuned for your drive!
         public static final double kPDriveVel = 0.1;
+    }
+
+    public static final class ShooterConstants {
+        public static final int kFlywheelMotorPort1 = 4;
+        public static final int kFlywheelMotorPort2 = 5;
+
+        public static final int[] kFlywheelEncoderPorts = new int[] {4, 5};
+
+        public static final double kFlywheelKs = 0.0437;
+
+        // Volts per (rotation per second)
+        private static final double kFlyWheelKvRotPerSec = 0.00217;
+
+        // Volts per (radian per second)
+        public static final double kFlywheelKv = 2 * Math.PI * (kFlyWheelKvRotPerSec / 60);
+
+        // Volts per (rotation per second squared
+        public static final double kFlywheelKaRotPerSecSq = 0.00103;
+
+        // Volts per (radian per second squared)
+        public static final double kFlywheelKa = 2 * Math.PI * (kFlywheelKaRotPerSecSq / 60);
+
+        public static final DCMotor kFlywheelGearbox = DCMotor.getNEO(2);
+
+        // gear ratio as output over input
+        public static final double kFlywheelGearRatio = 26.0/50.0;
+
+        public static final LinearSystem<N1, N1, N1> kFlywheelPlant = LinearSystemId.createFlywheelSystem(
+                kFlywheelGearbox, 0.00179, kFlywheelGearRatio);
+
+        public static double kFlywheelVelocityP = 0.0504;
     }
 
     public static final class OIConstants {

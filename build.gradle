@@ -50,6 +50,9 @@ dependencies {
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
 
+    wpi.deps.vendor.loadFrom(project(':GrouchLib'))
+    implementation wpi.deps.vendor.java()
+    implementation project(':GrouchLib')
 
     implementation wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)

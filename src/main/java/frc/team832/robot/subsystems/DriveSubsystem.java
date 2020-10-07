@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.Field2d;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
-import edu.wpi.first.wpilibj.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team832.robot.Constants;
 
@@ -51,7 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
     private final DifferentialDriveOdometry m_odometry;
 
     // These classes help us simulate our drivetrain
-    public DifferentialDrivetrainSim m_drivetrainSimulator;
+    private DifferentialDrivetrainSim m_drivetrainSimulator;
     private EncoderSim m_leftEncoderSim;
     private EncoderSim m_rightEncoderSim;
     // The Field2d class simulates the field in the sim GUI. Note that we can have only one
@@ -243,5 +241,13 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public double getHeading() {
         return Math.IEEEremainder(m_gyro.getAngle(), 360) * (Constants.DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    }
+
+    public double getSSLeftVelocity() {
+        return m_drivetrainSimulator.getState(DifferentialDrivetrainSim.State.kLeftVelocity);
+    }
+
+    public double getSSRightVelocity() {
+        return m_drivetrainSimulator.getState(DifferentialDrivetrainSim.State.kRightVelocity);
     }
 }
