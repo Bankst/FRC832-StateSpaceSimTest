@@ -25,6 +25,10 @@ public class Robot extends TimedRobot {
 
   private RobotContainer robotContainer;
 
+  public Robot() {
+    super(Constants.kRobotMainLoopPeriod);
+  }
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -36,12 +40,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void simulationPeriodic() {
-    double driveCurrent = -robotContainer.robotDrive.getDrawnCurrentAmps();
-    double shooterCurrent = -robotContainer.shooter.getDrawnCurrentAmps();
+    double driveCurrent = robotContainer.robotDrive.getDrawnCurrentAmps();
+    double shooterCurrent = robotContainer.shooter.getDrawnCurrentAmps();
     double loadedVoltage = BatterySim.calculateLoadedBatteryVoltage(12.8, 0.018, driveCurrent, shooterCurrent);
-
-
     RoboRioSim.setVInVoltage(loadedVoltage);
+    SmartDashboard.putNumber("robot/current_draw", driveCurrent + shooterCurrent);
   }
 
   @Override

@@ -1,5 +1,6 @@
 package frc.team832.robot;
 
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.system.LinearSystem;
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
@@ -8,6 +9,8 @@ import edu.wpi.first.wpiutil.math.numbers.N1;
 import edu.wpi.first.wpiutil.math.numbers.N2;
 
 public final class Constants {
+    public static final double kRobotMainLoopPeriod = 0.020;
+
     public static final class DriveConstants {
         public static final int kLeftMotor1Port = 0;
         public static final int kLeftMotor2Port = 1;
@@ -62,32 +65,61 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int kFlywheelMotorPort1 = 4;
         public static final int kFlywheelMotorPort2 = 5;
+        public static final int kFeederMotorPort = 6;
 
         public static final int[] kFlywheelEncoderPorts = new int[] {4, 5};
+        public static final int[] kFeederEncoderPorts = new int[] {6, 7};
 
+        // Volts to break static friction
         public static final double kFlywheelKs = 0.0437;
+        public static final double kFeederKs = 0.02;
 
         // Volts per (rotation per second)
-        private static final double kFlyWheelKvRotPerSec = 0.00217;
+        private static final double kFlywheelKvRotPerSec = 0.00217;
+        private static final double kFeederKvRotPerSec = 0.001;
 
         // Volts per (radian per second)
-        public static final double kFlywheelKv = 2 * Math.PI * (kFlyWheelKvRotPerSec / 60);
+        public static final double kFlywheelKv = 2 * Math.PI * (kFlywheelKvRotPerSec);
+        public static final double kFeederKv = 2 * Math.PI * (kFeederKvRotPerSec);
 
         // Volts per (rotation per second squared
         public static final double kFlywheelKaRotPerSecSq = 0.00103;
+        public static final double kFeederKaRotPerSecSq = 0.000515;
 
         // Volts per (radian per second squared)
-        public static final double kFlywheelKa = 2 * Math.PI * (kFlywheelKaRotPerSecSq / 60);
+        public static final double kFlywheelKa = 2 * Math.PI * (kFlywheelKaRotPerSecSq);
+        public static final double kFeederKa = 2 * Math.PI * (kFeederKaRotPerSecSq);
 
         public static final DCMotor kFlywheelGearbox = DCMotor.getNEO(2);
+        public static final DCMotor kFeederGearbox = DCMotor.getNEO(1);
 
-        // gear ratio as output over input
+        // Gear ratio as output over input
         public static final double kFlywheelGearRatio = 26.0/50.0;
+        public static final double kFeederGearRatio = 1.0/1.0;
 
-        public static final LinearSystem<N1, N1, N1> kFlywheelPlant = LinearSystemId.createFlywheelSystem(
-                kFlywheelGearbox, 0.00179, kFlywheelGearRatio);
+        // Moment of Inertia (kg meters squared)
+        public static final double kFlywheelMoI = 0.00179;
+        public static final double kFeederMoI = 0.000895;
+
+        // Linear system based on characterization data
+        public static final LinearSystem<N1, N1, N1> kFlywheelPlant_Char = LinearSystemId.identifyVelocitySystem(
+                kFlywheelKv, kFlywheelKa);
+        public static final LinearSystem<N1, N1, N1> kFeederPlant_Char = LinearSystemId.identifyVelocitySystem(
+                kFeederKv, kFeederKa);
+
+        // Linear system based on MoI data (from CAD)
+        public static final LinearSystem<N1, N1, N1> kFlywheelPlant_MoI = LinearSystemId.createFlywheelSystem(
+                kFlywheelGearbox, kFlywheelMoI, kFlywheelGearRatio);
+        public static final LinearSystem<N1, N1, N1> kFeederPlant_MoI = LinearSystemId.createFlywheelSystem(
+                kFeederGearbox, kFeederMoI, kFeederGearRatio);
 
         public static double kFlywheelVelocityP = 0.0504;
+        public static double kFeederVelocityP = 0.0252;
+
+        public static SimpleMotorFeedforward kFlywheelFF = new SimpleMotorFeedforward(
+                kFlywheelKs, kFlywheelKvRotPerSec, kFlywheelKaRotPerSecSq);
+        public static SimpleMotorFeedforward kFeederFF = new SimpleMotorFeedforward(
+                kFeederKs, kFeederKvRotPerSec, kFeederKaRotPerSecSq);
     }
 
     public static final class OIConstants {

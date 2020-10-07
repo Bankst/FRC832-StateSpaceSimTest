@@ -32,8 +32,8 @@ public final class RobotContainer {
     public RobotContainer() {
         robotDrive.setDefaultCommand(new RunCommand(() -> robotDrive.arcadeDrive(-controller.getY(GenericHID.Hand.kLeft), controller.getX(GenericHID.Hand.kRight)), robotDrive));
 
-        userButton.whenPressed(() -> shooter.setSetpoint(4000), shooter).whenReleased(() -> shooter.setSetpoint(0), shooter);
-        controller.aButton.whenPressed(() -> shooter.setSetpoint(4000), shooter).whenReleased(() -> shooter.setSetpoint(0), shooter);
+        controller.aButton.whenPressed(() -> shooter.setFeederRPMSetpoint(4000), shooter).whenReleased(() -> shooter.setFeederRPMSetpoint(0), shooter);
+        controller.bButton.whenPressed(() -> shooter.setFlywheelRPMSetpoint(9000), shooter).whenReleased(() -> shooter.setFlywheelRPMSetpoint(0), shooter);
     }
 
     public Command getAutonomousCommand() {
@@ -75,8 +75,8 @@ public final class RobotContainer {
                         Constants.DriveConstants.kaVoltSecondsSquaredPerMeter),
                 Constants.DriveConstants.kDriveKinematics,
                 robotDrive::getWheelSpeeds,
-                new PIDController(Constants.DriveConstants.kPDriveVel, 0, 0),
-                new PIDController(Constants.DriveConstants.kPDriveVel, 0, 0),
+                new PIDController(Constants.DriveConstants.kPDriveVel, 0, 0, Constants.kRobotMainLoopPeriod),
+                new PIDController(Constants.DriveConstants.kPDriveVel, 0, 0, Constants.kRobotMainLoopPeriod),
                 // RamseteCommand passes volts to the callback
                 robotDrive::tankDriveVolts,
                 robotDrive
